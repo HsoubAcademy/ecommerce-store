@@ -11,6 +11,7 @@ module.exports = {
   
   output: {
     path: path.join(__dirname, "/dist"),
+    publicPath: '',
     filename: "main.js"
   },
 
@@ -29,26 +30,24 @@ module.exports = {
 
       {
         test: require.resolve('jquery'),
-        use: [
-          {
-            loader: 'expose-loader',
-            options: 'jQuery'
-          },
-          {
-            loader: 'expose-loader',
-            options: '$'
-          }
-        ]
+        loader: 'expose-loader',
+        options: {
+          exposes: ['$', 'jQuery'],
+        }
       },
 
       {
         test: /\.(sa|sc|c)ss$/,
         use: [
-           
-            MiniCssExtractPlugin.loader,
-           'css-loader',
-           'sass-loader'
-        ]
+              {
+                loader: MiniCssExtractPlugin.loader, 
+                options: {
+                  publicPath: '../' 
+                }
+              },
+              'css-loader',
+              'sass-loader'
+            ]
       },
       
       {
@@ -58,7 +57,7 @@ module.exports = {
             loader: "file-loader", 
             options: {
               name: '[name].[ext]',
-              outputPath: "/images",
+              outputPath: "images",
             }
           }
         ]
@@ -71,7 +70,7 @@ module.exports = {
             loader: "file-loader", 
             options: {
               name: '[name].[ext]',
-              outputPath: "/fonts",
+              outputPath: "fonts",
               esModule: false,
             }
           }
@@ -83,9 +82,9 @@ module.exports = {
         use: [
           {
             loader: "html-loader",
-            options: {
-              minimize: true,
-            }
+            // options: {
+            //   minimize: true,
+            // }
           }
         ]
       }
